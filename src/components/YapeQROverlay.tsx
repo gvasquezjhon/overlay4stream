@@ -76,8 +76,8 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
       }}
     >
       <motion.div 
-        className="bg-gradient-to-br from-purple-100 to-indigo-50 backdrop-blur-md rounded-xl p-5 shadow-xl border border-purple-300"
-        animate={{ boxShadow: ["0px 4px 12px rgba(124, 58, 237, 0.2)", "0px 6px 16px rgba(124, 58, 237, 0.3)", "0px 4px 12px rgba(124, 58, 237, 0.2)"] }}
+        className="bg-gradient-to-br from-black/70 to-purple-900/70 backdrop-blur-md rounded-xl p-5 shadow-xl border border-purple-500/30"
+        animate={{ boxShadow: ["0px 4px 12px rgba(124, 58, 237, 0.3)", "0px 6px 16px rgba(124, 58, 237, 0.4)", "0px 4px 12px rgba(124, 58, 237, 0.3)"] }}
         transition={{ 
           duration: 2, 
           repeat: Infinity,
@@ -95,13 +95,13 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
               ease: "easeInOut"
             }}
           >
-            <h3 className="text-purple-800 font-bold text-lg mb-3 text-center flex items-center gap-2">
+            <h3 className="text-white font-bold text-lg mb-3 text-center flex items-center gap-2">
               <span className="text-xl">💜</span> Apoya el Stream
             </h3>
           </motion.div>
           
           {error ? (
-            <div className="text-red-500 text-sm p-2 text-center bg-red-50 rounded-lg">
+            <div className="text-red-300 text-sm p-2 text-center bg-red-900/50 rounded-lg border border-red-500/30">
               {error}
             </div>
           ) : !yapeAccount ? (
@@ -109,7 +109,7 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
           ) : (
             <>
               <motion.div 
-                className="bg-white p-3 rounded-lg mb-3 shadow-md"
+                className="bg-white/90 p-3 rounded-lg mb-3 shadow-md border border-purple-400/30"
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
@@ -133,7 +133,7 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
                 </motion.div>
               </motion.div>
               <motion.div
-                className="bg-purple-100 px-3 py-1 rounded-full mb-2"
+                className="bg-purple-600/40 px-3 py-1 rounded-full mb-2 border border-purple-400/30"
                 initial={{ scale: 0.95 }}
                 animate={{ scale: 1 }}
                 transition={{
@@ -142,15 +142,15 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
                   repeatType: "reverse"
                 }}
               >
-                <p className="text-purple-800 font-medium text-sm">
+                <p className="text-white font-medium text-sm text-shadow-sm">
                   Moradito: {yapeAccount.telefono}
                 </p>
               </motion.div>
             </>
           )}
           
-          <div className="mt-2 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full px-4 py-1.5">
-            <p className="text-white text-xs font-medium text-center">
+          <div className="mt-2 bg-gradient-to-r from-purple-600/80 to-indigo-600/80 rounded-full px-4 py-1.5 border border-purple-400/30">
+            <p className="text-white text-xs font-medium text-center text-shadow-sm">
               Tu apoyo motiva el contenido ✨
             </p>
           </div>
