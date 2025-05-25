@@ -30,11 +30,11 @@ function useSound() {
 }
 
 // Importar animaciones
-import conejoLentes from '/assets/lotties/conejo-lentes.json'
-import elefante from '/assets/lotties/elefante.json'
-import gatito from '/assets/lotties/gatito.json'
-import iguana from '/assets/lotties/iguana.json'
-import serpentinas from '/assets/lotties/serpentinas.json'
+import conejoLentes from '../assets/lotties/conejo-lentes.json'
+import elefante from '../assets/lotties/elefante.json'
+import gatito from '../assets/lotties/gatito.json'
+import iguana from '../assets/lotties/iguana.json'
+import serpentinas from '../assets/lotties/serpentinas.json'
 
 // Función para seleccionar una animación aleatoria
 function getRandomAnimation() {
@@ -67,7 +67,7 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
   // Reproducir sonido y gestionar animaciones
   useEffect(() => {
     // Reproducir sonido de aplausos
-    play('assets/sounds/aplausos.mp3')
+    play('../assets/sounds/aplausos.mp3')
 
     // Mostrar animación por 5 segundos, luego mostrar texto
     const animationTimer = setTimeout(() => {
