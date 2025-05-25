@@ -119,7 +119,7 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
       }}
     >
       <motion.div 
-        className="bg-gradient-to-br from-purple-100 to-indigo-50 backdrop-blur-md rounded-xl p-4 shadow-xl border border-purple-300"
+        className="bg-gradient-to-br from-purple-100 to-indigo-50 backdrop-blur-md rounded-xl p-4 shadow-xl border border-purple-300 w-80"
         animate={{ boxShadow: ["0px 4px 12px rgba(124, 58, 237, 0.2)", "0px 6px 16px rgba(124, 58, 237, 0.3)", "0px 4px 12px rgba(124, 58, 237, 0.2)"] }}
         transition={{ 
           duration: 2, 
@@ -157,11 +157,11 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
                   <div className="bg-purple-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">
                     {currentIndex + 1}
                   </div>
-                  <div className="text-purple-900 font-medium text-sm truncate max-w-[120px]">
+                  <div className="text-purple-900 font-medium text-sm truncate max-w-[160px]">
                     {transactions[currentIndex]?.nombre_pagador || "Anónimo"}
                   </div>
                 </div>
-                <div className="bg-purple-600 text-white px-2 py-1 rounded-md text-xs font-bold">
+                <div className="bg-purple-600 text-white px-2 py-1 rounded-md text-xs font-bold ml-1">
                   S/ {transactions[currentIndex]?.monto.toFixed(2)}
                 </div>
               </motion.div>
