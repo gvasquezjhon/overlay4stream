@@ -100,34 +100,22 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
             {/* Contenedor principal sin bordes ni fondo */}
             <motion.div className="p-4">
               {stage === 'animation' ? (
-                <div className="flex flex-col items-center justify-center">
-                  {/* Animación Lottie a pantalla completa */}
-                  <div className="w-full h-[60vh]">
+                <div className="flex items-center justify-center">
+                  {/* Animación Lottie a pantalla completa sin texto */}
+                  <div className="w-full h-screen fixed inset-0 flex items-center justify-center">
                     <Lottie
                       animationData={animationRef.current}
                       loop={true}
                       autoplay={true}
                       style={{ width: '100%', height: '100%' }}
                       rendererSettings={{
-                        preserveAspectRatio: 'xMidYMid slice'
+                        preserveAspectRatio: 'xMidYMid meet'
                       }}
                     />
                   </div>
-                  
-                  {/* Monto destacado con fondo más sutil */}
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: [0, 1.2, 1] }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
-                    className="backdrop-blur-md px-5 py-3 mt-4 rounded-full"
-                  >
-                    <span className="text-white font-bold text-3xl drop-shadow-lg">
-                      S/. {transaction.monto}
-                    </span>
-                  </motion.div>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center relative h-[60vh]">
+                <div className="flex flex-col items-center justify-center relative h-screen fixed inset-0">
                   {/* Animación de serpentinas a pantalla completa */}
                   <div className="absolute inset-0 z-0">
                     <Lottie
@@ -159,17 +147,19 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
               )}
 
               {/* Barra de progreso para el tiempo más sutil */}
-              <motion.div
-                className="h-1 bg-white/10 rounded-full overflow-hidden mt-6 max-w-md mx-auto"
-                initial={{ width: "100%" }}
-              >
+              {stage === 'text' && (
                 <motion.div
-                  className="h-full bg-white/40 rounded-full"
+                  className="h-1 bg-white/10 rounded-full overflow-hidden mt-6 max-w-md mx-auto fixed bottom-8 left-0 right-0"
                   initial={{ width: "100%" }}
-                  animate={{ width: "0%" }}
-                  transition={{ duration: stage === 'animation' ? 5 : 5, ease: "linear" }}
-                />
-              </motion.div>
+                >
+                  <motion.div
+                    className="h-full bg-white/40 rounded-full"
+                    initial={{ width: "100%" }}
+                    animate={{ width: "0%" }}
+                    transition={{ duration: 5, ease: "linear" }}
+                  />
+                </motion.div>
+              )}
             </motion.div>
           </div>
         </motion.div>
