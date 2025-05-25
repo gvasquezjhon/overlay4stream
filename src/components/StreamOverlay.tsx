@@ -99,17 +99,17 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
           <div className="relative w-full max-w-4xl">
             {/* Contenedor principal */}
             <motion.div
-              className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 
-                        rounded-b-2xl p-6 shadow-2xl border-2 border-white/20 backdrop-blur-sm"
+              className="rounded-b-2xl p-6 shadow-2xl border-2 border-white/10 backdrop-blur-sm bg-black/10"
             >
               {stage === 'animation' ? (
                 <div className="flex flex-col items-center justify-center">
                   {/* Animación Lottie */}
-                  <div className="w-64 h-64">
+                  <div className="w-full h-[50vh] flex justify-center items-center">
                     <Lottie
                       animationData={animationRef.current}
                       loop={true}
                       autoplay={true}
+                      style={{ width: '100%', height: '100%' }}
                     />
                   </div>
                   
@@ -133,6 +133,7 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
                       animationData={serpentinas}
                       loop={true}
                       autoplay={true}
+                      style={{ width: '100%', height: '100%' }}
                     />
                   </div>
                   
