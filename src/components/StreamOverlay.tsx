@@ -45,11 +45,11 @@ function getRandomAnimation() {
 // Función para obtener un saludo aleatorio
 function getRandomGreeting(name: string, amount: number) {
   const greetings = [
-    `¡Gracias, ${name}, por ese moradito de S/${amount}! ¡Se siente el cariño en cada yape!`,
-    `¡Oe, qué buena onda ${name}! Ese moradito de S/${amount} nos alegra el live. ¡Eres grande!`,
-    `¡Un moradito lleno de buena vibra llegó de parte de ${name} con S/${amount}! ¡Gracias de corazón!`,
-    `¡Atención, atención! ¡${name} se acaba de lucir con un moradito de S/${amount}! ¡Muchas gracias, crack!`,
-    `¡Gracias, ${name}, por el moradito de S/${amount}! ¡Se aprecia un montón!`
+    `¡Gracias, ${name}, por ese moradito de S/${amount}! \n¡Se siente el cariño en cada yape!`,
+    `¡Oe, qué buena onda ${name}! \nEse moradito de S/${amount} nos alegra el live. ¡Eres grande!`,
+    `¡Un moradito lleno de buena vibra llegó de parte de ${name} con S/${amount}! \n¡Gracias de corazón!`,
+    `¡Atención, atención! ¡${name} se acaba de lucir con un moradito de S/${amount}! \n¡Muchas gracias, crack!`,
+    `¡Gracias, ${name}, por el moradito de S/${amount}! \n¡Se aprecia un montón!`
   ];
   
   const randomIndex = Math.floor(Math.random() * greetings.length);
