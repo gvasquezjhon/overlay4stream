@@ -115,7 +115,7 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
               {stage === 'animation' ? (
                 <div className="flex items-center justify-center">
                   {/* Fondo oscuro con opacidad para mejorar contraste */}
-                  <div className="w-full h-screen fixed inset-0 bg-gradient-to-b from-black/60 to-purple-900/40 backdrop-blur-sm"></div>
+                  <div className="w-full h-screen fixed inset-0 bg-gradient-to-b from-black/80 to-purple-900/70 backdrop-blur-md"></div>
                   {/* Animación Lottie a pantalla completa sin texto */}
                   <div className="w-full h-screen fixed inset-0 flex items-center justify-center">
                     <Lottie
@@ -132,7 +132,7 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
               ) : (
                 <div className="flex flex-col items-center justify-center relative h-screen fixed inset-0">
                   {/* Fondo oscuro con opacidad para mejorar contraste */}
-                  <div className="w-full h-screen fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
+                  <div className="w-full h-screen fixed inset-0 bg-gradient-to-b from-black/80 to-purple-900/70 backdrop-blur-md"></div>
                   {/* Animación de serpentinas a pantalla completa */}
                   <div className="absolute inset-0 z-0">
                     <Lottie
@@ -175,12 +175,13 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
                       }}
                       className="font-['Montserrat'] 
                         text-[4vw] md:text-[3.5vw] lg:text-[3vw] xl:text-[2.5vw] 
-                        font-extrabold text-transparent bg-clip-text 
-                        bg-gradient-to-r from-white via-white to-white 
-                        text-center text-shadow drop-shadow-lg 
+                        font-extrabold text-white
+                        text-center text-shadow-strong drop-shadow-xl
                         whitespace-pre-line leading-[1.3] 
                         break-words
-                        animate-gradient-x animate-pulse-soft"
+                        animate-pulse-soft
+                        border-b-4 border-purple-500/50 pb-2 px-4
+                        bg-black/30 rounded-xl"
                     >
                       {greeting.current}
                     </motion.h2>
@@ -191,11 +192,11 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
               {/* Barra de progreso para el tiempo más sutil */}
               {stage === 'text' && (
                 <motion.div
-                  className="h-1.5 bg-purple-900/30 rounded-full overflow-hidden mt-6 max-w-md mx-auto fixed bottom-8 left-0 right-0 border border-purple-500/20"
+                  className="h-2 bg-purple-900/50 rounded-full overflow-hidden mt-6 max-w-md mx-auto fixed bottom-8 left-0 right-0 border border-purple-500/40 shadow-lg"
                   initial={{ width: "100%" }}
                 >
                   <motion.div
-                    className="h-full bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full"
+                    className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full"
                     initial={{ width: "100%" }}
                     animate={{ width: "0%" }}
                     transition={{ duration: 5, ease: "linear" }}
@@ -222,8 +223,19 @@ const fontStyles = `
     text-shadow: 0 1px 3px rgba(0,0,0,0.7);
   }
   
+  .text-shadow-strong {
+    text-shadow: 
+      0 2px 4px rgba(0,0,0,0.8),
+      0 4px 8px rgba(0,0,0,0.6),
+      0 8px 16px rgba(0,0,0,0.4);
+  }
+  
   .drop-shadow-lg {
     filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+  }
+  
+  .drop-shadow-xl {
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.8));
   }
   
   .shadow-glow {
