@@ -1,12 +1,7 @@
-import TestForm from './TestForm' // o como hayas nombrado tu componente
+import StreamOverlay from './components/StreamOverlay'
 
 function App() {
-  return <TestForm />
-  /*return (
-       <div className="text-red-500 bg-blue-100 p-4">
-        ¡Hola Tailwind v4!
-      </div>
-  )*/
+  return <StreamOverlay />
 }
 
 export default App
