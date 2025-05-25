@@ -13,6 +13,7 @@ interface Transaction {
   read: boolean
   transaction_id: number
   monto: number
+  nombre_pagador: string
 }
 
 interface NotificationProps {
@@ -62,13 +63,8 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
   const [stage, setStage] = useState<'animation'|'text'>(('animation'))
   const animationRef = useRef<any>(getRandomAnimation())
   
-  // Extraer nombre del donante del mensaje
-  const extractDonorName = (message: string) => {
-    const match = message.match(/de (.+)$/)
-    return match ? match[1] : 'Donante Anónimo'
-  }
-
-  const donorName = extractDonorName(transaction.message)
+  // Obtener nombre del donante del campo nombre_pagador
+  const donorName = transaction.nombre_pagador || 'Donante Anónimo'
   const greeting = useRef(getRandomGreeting(donorName, transaction.monto))
 
   // Reproducir sonido y gestionar animaciones
