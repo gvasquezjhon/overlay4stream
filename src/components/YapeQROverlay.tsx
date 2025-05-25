@@ -109,12 +109,12 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
           ) : (
             <>
               <motion.div 
-                className="bg-white/90 p-3 rounded-lg mb-3 shadow-md border border-purple-400/30"
+                className="bg-white p-3 rounded-lg mb-3 shadow-md"
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
                 <motion.div
-                  initial={{ opacity: 0.9 }}
+                  initial={{ opacity: 0.95 }}
                   animate={{ opacity: 1 }}
                   transition={{
                     duration: 1.5,
@@ -128,7 +128,7 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
                     level="H"
                     includeMargin={true}
                     bgColor={"#ffffff"}
-                    fgColor={"#5b21b6"}
+                    fgColor={"#000000"}
                   />
                 </motion.div>
               </motion.div>
