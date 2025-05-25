@@ -29,13 +29,20 @@ function useSound() {
   return { play }
 }
 
+// Importar animaciones
+import conejoLentes from '/assets/lotties/conejo-lentes.json'
+import elefante from '/assets/lotties/elefante.json'
+import gatito from '/assets/lotties/gatito.json'
+import iguana from '/assets/lotties/iguana.json'
+import serpentinas from '/assets/lotties/serpentinas.json'
+
 // Función para seleccionar una animación aleatoria
 function getRandomAnimation() {
   const animations = [
-    '/assets/lotties/conejo-lentes.json',
-    '/assets/lotties/elefante.json',
-    '/assets/lotties/gatito.json',
-    '/assets/lotties/iguana.json'
+    conejoLentes,
+    elefante,
+    gatito,
+    iguana
   ]
   
   const randomIndex = Math.floor(Math.random() * animations.length)
@@ -99,7 +106,7 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
                   {/* Animación Lottie */}
                   <div className="w-64 h-64">
                     <Lottie
-                      animationData={require(animationRef.current)}
+                      animationData={animationRef.current}
                       loop={true}
                       autoplay={true}
                     />
@@ -122,7 +129,7 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
                   {/* Animación de serpentinas */}
                   <div className="absolute inset-0 z-0">
                     <Lottie
-                      animationData={require('/assets/lotties/serpentinas.json')}
+                      animationData={serpentinas}
                       loop={true}
                       autoplay={true}
                     />
