@@ -101,6 +101,8 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
             <motion.div className="p-4">
               {stage === 'animation' ? (
                 <div className="flex items-center justify-center">
+                  {/* Fondo oscuro con opacidad para mejorar contraste */}
+                  <div className="w-full h-screen fixed inset-0 bg-black/30 backdrop-blur-sm"></div>
                   {/* Animación Lottie a pantalla completa sin texto */}
                   <div className="w-full h-screen fixed inset-0 flex items-center justify-center">
                     <Lottie
@@ -116,6 +118,8 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center relative h-screen fixed inset-0">
+                  {/* Fondo oscuro con opacidad para mejorar contraste */}
+                  <div className="w-full h-screen fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
                   {/* Animación de serpentinas a pantalla completa */}
                   <div className="absolute inset-0 z-0">
                     <Lottie
