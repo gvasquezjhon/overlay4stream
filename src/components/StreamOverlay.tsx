@@ -20,10 +20,30 @@ interface NotificationProps {
 
 // Función para reproducir sonido
 function useSound() {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  
+  useEffect(() => {
+    // Crear el elemento de audio una vez
+    audioRef.current = new Audio();
+    audioRef.current.volume = 0.8;
+    
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+    };
+  }, []);
+  
   const play = (soundPath: string) => {
-    const audio = new Audio(soundPath)
-    audio.volume = 0.8
-    audio.play()
+    if (audioRef.current) {
+      audioRef.current.src = soundPath;
+      
+      // Intentar reproducir y manejar el error silenciosamente
+      audioRef.current.play().catch(error => {
+        console.log('No se pudo reproducir el audio automáticamente:', error);
+      });
+    }
   }
 
   return { play }
@@ -66,8 +86,8 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
 
   // Reproducir sonido y gestionar animaciones
   useEffect(() => {
-    // Reproducir sonido de aplausos
-    play('../assets/sounds/aplausos.mp3')
+    // Intentar reproducir sonido de aplausos (puede fallar por restricciones del navegador)
+    play('/assets/sounds/aplausos.mp3')
 
     // Mostrar animación por 5 segundos, luego mostrar texto
     const animationTimer = setTimeout(() => {
@@ -250,6 +270,18 @@ export default function StreamOverlay() {
     setNotifications(prev => prev.filter(n => n.id !== transactionId))
   }
 
+  // Estado para controlar si el usuario ha interactuado
+  const [userInteracted, setUserInteracted] = useState(false);
+  
+  // Función para manejar la interacción del usuario
+  const handleUserInteraction = () => {
+    setUserInteracted(true);
+    // Reproducir un audio silencioso para desbloquear la API de audio
+    const audio = new Audio();
+    audio.volume = 0.01;
+    audio.play().catch(() => {});
+  };
+  
   // Si no hay token, mostrar mensaje
   if (!token) {
     return (
@@ -261,6 +293,28 @@ export default function StreamOverlay() {
           <p className="text-gray-600">
             Agrega ?token=tu_token a la URL
           </p>
+        </div>
+      </div>
+    )
+  }
+  
+  // Si el usuario no ha interactuado, mostrar botón
+  if (!userInteracted) {
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+        <div className="bg-white rounded-lg p-6 text-center">
+          <h2 className="text-xl font-bold text-gray-800 mb-2">
+            Activar sonidos
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Haz clic en el botón para activar los sonidos del overlay
+          </p>
+          <button 
+            onClick={handleUserInteraction}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Activar
+          </button>
         </div>
       </div>
     )
