@@ -58,23 +58,32 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
 
   // Reproducir sonido y gestionar animaciones
   useEffect(() => {
-    // Reproducir sonido de aplausos usando la biblioteca use-sound
-    playAplausos()
+    let animationTimer: number;
+    let hideTimer: number;
+    let completeTimer: number;
+    
+    try {
+      // Reproducir sonido de aplausos usando la biblioteca use-sound
+      playAplausos();
+    } catch (error) {
+      console.error("Error al reproducir sonido:", error);
+    }
 
     // Mostrar animación por 5 segundos, luego mostrar texto
-    const animationTimer = setTimeout(() => {
+    animationTimer = window.setTimeout(() => {
       setStage('text')
     }, 5000)
 
     // Auto-ocultar después de 10 segundos en total
-    const hideTimer = setTimeout(() => {
+    hideTimer = window.setTimeout(() => {
       setIsVisible(false)
-      setTimeout(onComplete, 500) // Tiempo para la animación de salida
+      completeTimer = window.setTimeout(onComplete, 500) // Tiempo para la animación de salida
     }, 10000)
 
     return () => {
-      clearTimeout(animationTimer)
-      clearTimeout(hideTimer)
+      window.clearTimeout(animationTimer)
+      window.clearTimeout(hideTimer)
+      window.clearTimeout(completeTimer)
     }
   }, [transaction, playAplausos, onComplete])
 
@@ -192,8 +201,16 @@ export default function StreamOverlay() {
   useEffect(() => {
     if (!token) return
 
+    let isComponentMounted = true;
+    let reconnectTimeout: number | null = null;
+
     const connectWebSocket = () => {
       try {
+        // Limpiar cualquier conexión existente
+        if (wsRef.current && wsRef.current.readyState !== WebSocket.CLOSED) {
+          wsRef.current.close();
+        }
+
         // Ajusta esta URL a tu servidor WebSocket
         wsRef.current = new WebSocket(`ws://localhost:8000/api/v1/ws?token=${token}`)
         
@@ -202,6 +219,8 @@ export default function StreamOverlay() {
         }
 
         wsRef.current.onmessage = (event) => {
+          if (!isComponentMounted) return;
+          
           try {
             const data = JSON.parse(event.data)
             console.log('📨 Mensaje recibido:', data)
@@ -214,25 +233,55 @@ export default function StreamOverlay() {
           }
         }
 
-        wsRef.current.onclose = () => {
-          console.log('🔌 Conexión WebSocket cerrada. Reintentando...')
-          setTimeout(connectWebSocket, 3000)
+        wsRef.current.onclose = (event) => {
+          console.log('🔌 Conexión WebSocket cerrada. Reintentando...', event.code, event.reason)
+          
+          // Solo reconectar si el componente sigue montado
+          if (isComponentMounted) {
+            if (reconnectTimeout) window.clearTimeout(reconnectTimeout);
+            reconnectTimeout = window.setTimeout(connectWebSocket, 3000);
+          }
         }
 
         wsRef.current.onerror = (error) => {
           console.error('❌ Error WebSocket:', error)
+          
+          // Cerrar la conexión con error para que se active onclose y se reconecte
+          if (wsRef.current) {
+            wsRef.current.close();
+          }
         }
       } catch (error) {
         console.error('Error conectando WebSocket:', error)
-        setTimeout(connectWebSocket, 3000)
+        
+        // Solo reconectar si el componente sigue montado
+        if (isComponentMounted) {
+          if (reconnectTimeout) window.clearTimeout(reconnectTimeout);
+          reconnectTimeout = window.setTimeout(connectWebSocket, 3000);
+        }
       }
     }
 
     connectWebSocket()
 
+    // Limpieza al desmontar el componente
     return () => {
+      isComponentMounted = false;
+      
+      if (reconnectTimeout) {
+        window.clearTimeout(reconnectTimeout);
+      }
+      
       if (wsRef.current) {
-        wsRef.current.close()
+        // Desactivar todos los listeners antes de cerrar
+        wsRef.current.onopen = null;
+        wsRef.current.onmessage = null;
+        wsRef.current.onclose = null;
+        wsRef.current.onerror = null;
+        
+        // Cerrar la conexión
+        wsRef.current.close();
+        wsRef.current = null;
       }
     }
   }, [token])
