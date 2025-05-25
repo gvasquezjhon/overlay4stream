@@ -55,16 +55,8 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
     fetchYapeAccount();
   }, [token, apiUrl, yapePhone]);
 
-  // Alternar visibilidad cada 5 minutos
-  useEffect(() => {
-    const toggleInterval = setInterval(() => {
-      setIsVisible(prev => !prev);
-    }, 5 * 60 * 1000); // 5 minutos
-
-    return () => clearInterval(toggleInterval);
-  }, []);
-
-  if (!isVisible) return null;
+  // El QR siempre estará visible
+  if (!token) return null;
 
   return (
     <motion.div 
