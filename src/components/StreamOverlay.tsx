@@ -185,8 +185,16 @@ const fontStyles = `
     text-shadow: 0 2px 8px rgba(0,0,0,0.5);
   }
   
+  .text-shadow-sm {
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+  }
+  
   .drop-shadow-lg {
     filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+  }
+  
+  .shadow-glow {
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
   }
 `;
 

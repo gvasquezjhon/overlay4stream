@@ -89,9 +89,9 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="bg-gradient-to-br from-purple-100 to-indigo-50 backdrop-blur-md rounded-xl p-4 shadow-xl border border-purple-300">
+        <div className="bg-gradient-to-br from-black/70 to-purple-900/70 backdrop-blur-md rounded-xl p-4 shadow-xl border border-purple-500/30">
           <div className="flex flex-col items-center">
-            <h3 className="text-purple-800 font-bold text-sm mb-2">
+            <h3 className="text-white font-bold text-sm mb-2">
               Familia que Apoya
             </h3>
             <div className="animate-pulse bg-purple-200 h-6 w-32 rounded-md"></div>
@@ -119,8 +119,8 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
       }}
     >
       <motion.div 
-        className="bg-gradient-to-br from-purple-100 to-indigo-50 backdrop-blur-md rounded-xl p-4 shadow-xl border border-purple-300 w-80"
-        animate={{ boxShadow: ["0px 4px 12px rgba(124, 58, 237, 0.2)", "0px 6px 16px rgba(124, 58, 237, 0.3)", "0px 4px 12px rgba(124, 58, 237, 0.2)"] }}
+        className="bg-gradient-to-br from-black/70 to-purple-900/70 backdrop-blur-md rounded-xl p-4 shadow-xl border border-purple-500/30 w-80"
+        animate={{ boxShadow: ["0px 4px 12px rgba(124, 58, 237, 0.3)", "0px 6px 16px rgba(124, 58, 237, 0.4)", "0px 4px 12px rgba(124, 58, 237, 0.3)"] }}
         transition={{ 
           duration: 2, 
           repeat: Infinity,
@@ -138,7 +138,7 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
               ease: "easeInOut"
             }}
           >
-            <h3 className="text-purple-800 font-bold text-sm mb-2 text-center flex items-center gap-1">
+            <h3 className="text-white font-bold text-sm mb-2 text-center flex items-center gap-1">
               <span className="text-sm">👑</span> Familia que Apoya
             </h3>
           </motion.div>
@@ -154,14 +154,14 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
                 className="flex justify-between items-center w-full"
               >
                 <div className="flex items-center gap-2">
-                  <div className="bg-purple-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">
+                  <div className="bg-purple-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-glow">
                     {currentIndex + 1}
                   </div>
-                  <div className="text-purple-900 font-medium text-sm truncate max-w-[160px]">
+                  <div className="text-white font-medium text-sm truncate max-w-[160px] text-shadow-sm">
                     {transactions[currentIndex]?.nombre_pagador || "Anónimo"}
                   </div>
                 </div>
-                <div className="bg-purple-600 text-white px-2 py-1 rounded-md text-xs font-bold ml-1">
+                <div className="bg-purple-600/80 text-white px-2 py-1 rounded-md text-xs font-bold ml-1 shadow-glow">
                   S/ {transactions[currentIndex]?.monto.toFixed(2)}
                 </div>
               </motion.div>
@@ -169,17 +169,17 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
           </div>
           
           {/* Indicador de progreso */}
-          <div className="w-full mt-2 bg-purple-200 rounded-full h-1 overflow-hidden">
+          <div className="w-full mt-2 bg-white/20 rounded-full h-1 overflow-hidden">
             <motion.div 
-              className="bg-purple-600 h-full"
+              className="bg-purple-400 h-full"
               initial={{ width: "0%" }}
               animate={{ width: `${((currentIndex + 1) / transactions.length) * 100}%` }}
               transition={{ duration: 0.3 }}
             />
           </div>
           
-          <div className="mt-2 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full px-3 py-1">
-            <p className="text-white text-xs font-medium text-center">
+          <div className="mt-2 bg-gradient-to-r from-purple-600/80 to-indigo-600/80 rounded-full px-3 py-1 border border-purple-400/30">
+            <p className="text-white text-xs font-medium text-center text-shadow-sm">
               {transactions.length} apoyos hoy ✨
             </p>
           </div>
