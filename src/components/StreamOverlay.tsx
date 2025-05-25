@@ -286,9 +286,35 @@ export default function StreamOverlay() {
     }
   }, [token])
 
-  // Remover notificación completada
-  const handleNotificationComplete = (transactionId: number) => {
-    setNotifications(prev => prev.filter(n => n.id !== transactionId))
+  // Marcar notificación como leída y removerla
+  const handleNotificationComplete = async (notification: Transaction) => {
+    try {
+      // Marcar como leída en el servidor
+      if (token) {
+        const response = await fetch(
+          `http://localhost:8000/api/v1/notifications/${notification.id}/read`,
+          {
+            method: 'PUT',
+            headers: {
+              'accept': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+        
+        if (response.ok) {
+          console.log(`✅ Notificación ${notification.id} marcada como leída`);
+        } else {
+          console.error(`❌ Error al marcar notificación ${notification.id} como leída:`, 
+            await response.text());
+        }
+      }
+    } catch (error) {
+      console.error('Error al marcar notificación como leída:', error);
+    } finally {
+      // Remover de la lista local independientemente del resultado
+      setNotifications(prev => prev.filter(n => n.id !== notification.id));
+    }
   }
 
   // Estado para controlar si el usuario ha interactuado
@@ -356,7 +382,7 @@ export default function StreamOverlay() {
           >
             <DonationNotification
               transaction={notification}
-              onComplete={() => handleNotificationComplete(notification.id)}
+              onComplete={() => handleNotificationComplete(notification)}
             />
           </motion.div>
         ))}
