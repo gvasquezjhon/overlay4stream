@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Lottie from 'lottie-react'
 import useSound from 'use-sound'
 import aplausosSound from '../assets/sounds/aplausos.mp3'
+import YapeQROverlay from './YapeQROverlay'
 
 interface Transaction {
   id: number
@@ -209,6 +210,9 @@ export default function StreamOverlay() {
 
     let isComponentMounted = true;
     let reconnectTimeout: number | null = null;
+    
+    // Obtener URL del WebSocket desde variables de entorno
+    const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8000';
 
     const connectWebSocket = () => {
       try {
@@ -217,8 +221,8 @@ export default function StreamOverlay() {
           wsRef.current.close();
         }
 
-        // Ajusta esta URL a tu servidor WebSocket
-        wsRef.current = new WebSocket(`ws://localhost:8000/api/v1/ws?token=${token}`)
+        // Usar la URL del WebSocket desde variables de entorno
+        wsRef.current = new WebSocket(`${wsUrl}/api/v1/ws?token=${token}`)
         
         wsRef.current.onopen = () => {
           console.log('🔗 Conexión WebSocket abierta')
@@ -295,10 +299,13 @@ export default function StreamOverlay() {
   // Marcar notificación como leída y removerla
   const handleNotificationComplete = async (notification: Transaction) => {
     try {
+      // Obtener URL de la API desde variables de entorno
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      
       // Marcar como leída en el servidor
       if (token) {
         const response = await fetch(
-          `http://localhost:8000/api/v1/notifications/${notification.id}/read`,
+          `${apiUrl}/api/v1/notifications/${notification.id}/read`,
           {
             method: 'PUT',
             headers: {
@@ -394,6 +401,9 @@ export default function StreamOverlay() {
         ))}
       </AnimatePresence>
 
+      {/* Componente QR de Yape */}
+      <YapeQROverlay token={token} />
+      
       {/* Indicador de conexión */}
       <div className="fixed bottom-4 left-4 z-40">
         <div className="bg-black/50 rounded-full px-3 py-1 flex items-center space-x-2">
