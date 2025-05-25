@@ -91,62 +91,66 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: -50 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -50 }}
-          className="fixed top-0 left-0 right-0 z-50 flex justify-center"
+          exit={{ opacity: 0, y: 50 }}
+          className="fixed bottom-0 left-0 right-0 z-50 flex justify-center"
         >
-          <div className="relative w-full max-w-4xl">
-            {/* Contenedor principal */}
-            <motion.div
-              className="rounded-b-2xl p-6 shadow-2xl border-2 border-white/10 backdrop-blur-sm bg-black/10"
-            >
+          <div className="relative w-full max-w-5xl">
+            {/* Contenedor principal sin bordes ni fondo */}
+            <motion.div className="p-4">
               {stage === 'animation' ? (
                 <div className="flex flex-col items-center justify-center">
-                  {/* Animación Lottie */}
-                  <div className="w-full h-[50vh] flex justify-center items-center">
+                  {/* Animación Lottie a pantalla completa */}
+                  <div className="w-full h-[60vh]">
                     <Lottie
                       animationData={animationRef.current}
                       loop={true}
                       autoplay={true}
                       style={{ width: '100%', height: '100%' }}
+                      rendererSettings={{
+                        preserveAspectRatio: 'xMidYMid slice'
+                      }}
                     />
                   </div>
                   
-                  {/* Monto destacado */}
+                  {/* Monto destacado con fondo más sutil */}
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: [0, 1.2, 1] }}
                     transition={{ delay: 0.3, duration: 0.5 }}
-                    className="bg-white/20 rounded-xl px-5 py-3 mt-4"
+                    className="backdrop-blur-md px-5 py-3 mt-4 rounded-full"
                   >
-                    <span className="text-white font-bold text-2xl">
+                    <span className="text-white font-bold text-3xl drop-shadow-lg">
                       S/. {transaction.monto}
                     </span>
                   </motion.div>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center relative">
-                  {/* Animación de serpentinas */}
+                <div className="flex flex-col items-center justify-center relative h-[60vh]">
+                  {/* Animación de serpentinas a pantalla completa */}
                   <div className="absolute inset-0 z-0">
                     <Lottie
                       animationData={serpentinas}
                       loop={true}
                       autoplay={true}
                       style={{ width: '100%', height: '100%' }}
+                      rendererSettings={{
+                        preserveAspectRatio: 'xMidYMid slice'
+                      }}
                     />
                   </div>
                   
-                  {/* Texto de agradecimiento */}
-                  <div className="z-10 text-center p-8">
-                    <h2 className="font-['Montserrat'] text-4xl font-extrabold text-white mb-4 text-shadow">
+                  {/* Texto de agradecimiento con mejor contraste */}
+                  <div className="z-10 text-center">
+                    <h2 className="font-['Montserrat'] text-5xl font-extrabold text-white mb-4 text-shadow drop-shadow-lg">
                       ¡GRACIAS POR TU DONACIÓN!
                     </h2>
-                    <p className="font-['Poppins'] text-2xl text-white/90 mb-6">
+                    <p className="font-['Poppins'] text-3xl text-white mb-6 drop-shadow-lg">
                       {donorName}
                     </p>
-                    <div className="bg-white/20 rounded-xl px-5 py-3 inline-block">
-                      <span className="text-white font-bold text-3xl">
+                    <div className="backdrop-blur-md rounded-full px-6 py-3 inline-block">
+                      <span className="text-white font-bold text-4xl drop-shadow-lg">
                         S/. {transaction.monto}
                       </span>
                     </div>
@@ -154,13 +158,13 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
                 </div>
               )}
 
-              {/* Barra de progreso para el tiempo */}
+              {/* Barra de progreso para el tiempo más sutil */}
               <motion.div
-                className="h-2 bg-white/20 rounded-full overflow-hidden mt-4"
+                className="h-1 bg-white/10 rounded-full overflow-hidden mt-6 max-w-md mx-auto"
                 initial={{ width: "100%" }}
               >
                 <motion.div
-                  className="h-full bg-white/60 rounded-full"
+                  className="h-full bg-white/40 rounded-full"
                   initial={{ width: "100%" }}
                   animate={{ width: "0%" }}
                   transition={{ duration: stage === 'animation' ? 5 : 5, ease: "linear" }}
@@ -179,7 +183,11 @@ const fontStyles = `
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Poppins:wght@400;600&display=swap');
 
   .text-shadow {
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+  
+  .drop-shadow-lg {
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
   }
 `;
 
