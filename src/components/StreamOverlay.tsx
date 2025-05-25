@@ -115,7 +115,7 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
               {stage === 'animation' ? (
                 <div className="flex items-center justify-center">
                   {/* Fondo oscuro con opacidad para mejorar contraste */}
-                  <div className="w-full h-screen fixed inset-0 bg-black/30 backdrop-blur-sm"></div>
+                  <div className="w-full h-screen fixed inset-0 bg-gradient-to-b from-black/60 to-purple-900/40 backdrop-blur-sm"></div>
                   {/* Animación Lottie a pantalla completa sin texto */}
                   <div className="w-full h-screen fixed inset-0 flex items-center justify-center">
                     <Lottie
@@ -146,11 +146,44 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
                     />
                   </div>
                   
-                  {/* Texto de agradecimiento con mejor contraste */}
-                  <div className="z-10 text-center max-w-4xl mx-auto px-4">
-                    <h2 className="font-['Montserrat'] text-5xl font-extrabold text-white mb-8 text-shadow drop-shadow-lg whitespace-pre-line leading-tight">
+                  {/* Texto de agradecimiento con mejor contraste y responsive */}
+                  <div className="z-10 text-center max-w-6xl mx-auto px-4 flex items-center justify-center h-full">
+                    <motion.h2 
+                      initial={{ 
+                        opacity: 0, 
+                        scale: 0.8,
+                        y: 50 
+                      }}
+                      animate={{ 
+                        opacity: 1, 
+                        scale: 1,
+                        y: 0,
+                        transition: {
+                          type: "spring",
+                          stiffness: 100,
+                          damping: 10,
+                          duration: 0.5
+                        }
+                      }}
+                      exit={{ 
+                        opacity: 0, 
+                        scale: 0.8,
+                        y: 50,
+                        transition: {
+                          duration: 0.3
+                        }
+                      }}
+                      className="font-['Montserrat'] 
+                        text-[4vw] md:text-[3.5vw] lg:text-[3vw] xl:text-[2.5vw] 
+                        font-extrabold text-transparent bg-clip-text 
+                        bg-gradient-to-r from-white via-white to-white 
+                        text-center text-shadow drop-shadow-lg 
+                        whitespace-pre-line leading-[1.3] 
+                        break-words
+                        animate-gradient-x animate-pulse-soft"
+                    >
                       {greeting.current}
-                    </h2>
+                    </motion.h2>
                   </div>
                 </div>
               )}
@@ -158,11 +191,11 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
               {/* Barra de progreso para el tiempo más sutil */}
               {stage === 'text' && (
                 <motion.div
-                  className="h-1 bg-white/10 rounded-full overflow-hidden mt-6 max-w-md mx-auto fixed bottom-8 left-0 right-0"
+                  className="h-1.5 bg-purple-900/30 rounded-full overflow-hidden mt-6 max-w-md mx-auto fixed bottom-8 left-0 right-0 border border-purple-500/20"
                   initial={{ width: "100%" }}
                 >
                   <motion.div
-                    className="h-full bg-white/40 rounded-full"
+                    className="h-full bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full"
                     initial={{ width: "100%" }}
                     animate={{ width: "0%" }}
                     transition={{ duration: 5, ease: "linear" }}
