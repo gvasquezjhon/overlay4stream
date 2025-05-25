@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { DotLottiePlayer } from '@lottiefiles/dotlottie-react-player'
+import Lottie from 'lottie-react'
 
 interface Transaction {
   id: number
@@ -32,10 +32,10 @@ function useSound() {
 // Función para seleccionar una animación aleatoria
 function getRandomAnimation() {
   const animations = [
-    'assets/lotties/conejo-lentes.lottie',
-    'assets/lotties/elefante.lottie',
-    'assets/lotties/gatito.lottie',
-    'assets/lotties/iguana.lottie'
+    '/assets/lotties/conejo-lentes.json',
+    '/assets/lotties/elefante.json',
+    '/assets/lotties/gatito.json',
+    '/assets/lotties/iguana.json'
   ]
   
   const randomIndex = Math.floor(Math.random() * animations.length)
@@ -98,10 +98,10 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
                 <div className="flex flex-col items-center justify-center">
                   {/* Animación Lottie */}
                   <div className="w-64 h-64">
-                    <DotLottiePlayer
-                      src={animationRef.current}
-                      autoplay
-                      loop
+                    <Lottie
+                      animationData={require(animationRef.current)}
+                      loop={true}
+                      autoplay={true}
                     />
                   </div>
                   
@@ -121,10 +121,10 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
                 <div className="flex flex-col items-center justify-center relative">
                   {/* Animación de serpentinas */}
                   <div className="absolute inset-0 z-0">
-                    <DotLottiePlayer
-                      src="assets/lotties/serpentinas.lottie"
-                      autoplay
-                      loop
+                    <Lottie
+                      animationData={require('/assets/lotties/serpentinas.json')}
+                      loop={true}
+                      autoplay={true}
                     />
                   </div>
                   
