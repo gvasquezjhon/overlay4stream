@@ -151,7 +151,7 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
                 }}
               >
                 <p className="text-purple-800 font-medium text-sm">
-                  Yape: {yapeAccount.telefono}
+                  Moradito: {yapeAccount.telefono}
                 </p>
               </motion.div>
             </>
@@ -159,7 +159,7 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
           
           <div className="mt-2 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full px-4 py-1.5">
             <p className="text-white text-xs font-medium text-center">
-              Cada moradito suma 🙏✨
+              Tu apoyo motiva el contenido ✨
             </p>
           </div>
         </div>
