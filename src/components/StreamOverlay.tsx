@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Heart, Star, Sparkles, Gift, Crown, Zap } from 'lucide-react'
+import { DotLottiePlayer } from '@lottiefiles/dotlottie-react-player'
 
 interface Transaction {
   id: number
@@ -18,77 +18,37 @@ interface NotificationProps {
   onComplete: () => void
 }
 
-// Hook personalizado para texto a voz usando Web Speech API
-function useSpeech() {
-  const speak = (text: string) => {
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text)
-      utterance.rate = 0.9
-      utterance.pitch = 1.1
-      utterance.volume = 0.8
-      
-      // Buscar una voz en español si está disponible
-      const voices = speechSynthesis.getVoices()
-      const spanishVoice = voices.find(voice => voice.lang.includes('es'))
-      if (spanishVoice) {
-        utterance.voice = spanishVoice
-      }
-      
-      speechSynthesis.speak(utterance)
-    }
+// Función para reproducir sonido
+function useSound() {
+  const play = (soundPath: string) => {
+    const audio = new Audio(soundPath)
+    audio.volume = 0.8
+    audio.play()
   }
 
-  return { speak }
+  return { play }
+}
+
+// Función para seleccionar una animación aleatoria
+function getRandomAnimation() {
+  const animations = [
+    'assets/lotties/conejo-lentes.lottie',
+    'assets/lotties/elefante.lottie',
+    'assets/lotties/gatito.lottie',
+    'assets/lotties/iguana.lottie'
+  ]
+  
+  const randomIndex = Math.floor(Math.random() * animations.length)
+  return animations[randomIndex]
 }
 
 // Componente para cada tipo de notificación
 function DonationNotification({ transaction, onComplete }: NotificationProps) {
-  const { speak } = useSpeech()
+  const { play } = useSound()
   const [isVisible, setIsVisible] = useState(true)
+  const [stage, setStage] = useState<'animation'|'text'>(('animation'))
+  const animationRef = useRef<string>(getRandomAnimation())
   
-  // Determinar el tipo de diseño basado en el monto
-  const getDesignType = (amount: number) => {
-    if (amount >= 3.1) return 'pro'
-    if (amount >= 1.1) return 'standard'
-    return 'basic'
-  }
-
-  const designType = getDesignType(transaction.monto)
-
-  // Configuración de diseños
-  const designs = {
-    basic: {
-      bgGradient: 'from-blue-400 to-purple-500',
-      icon: Heart,
-      iconColor: 'text-white',
-      duration: 4000,
-      sparkles: 5,
-      shadow: 'shadow-lg',
-      scale: 'scale-100'
-    },
-    standard: {
-      bgGradient: 'from-yellow-400 via-orange-500 to-red-500',
-      icon: Star,
-      iconColor: 'text-yellow-100',
-      duration: 6000,
-      sparkles: 10,
-      shadow: 'shadow-xl',
-      scale: 'scale-105'
-    },
-    pro: {
-      bgGradient: 'from-purple-600 via-pink-600 to-red-600',
-      icon: Crown,
-      iconColor: 'text-yellow-300',
-      duration: 8000,
-      sparkles: 20,
-      shadow: 'shadow-2xl',
-      scale: 'scale-110'
-    }
-  }
-
-  const design = designs[designType]
-  const IconComponent = design.icon
-
   // Extraer nombre del donante del mensaje
   const extractDonorName = (message: string) => {
     const match = message.match(/de (.+)$/)
@@ -97,172 +57,122 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
 
   const donorName = extractDonorName(transaction.message)
 
-  // Texto a voz
+  // Reproducir sonido y gestionar animaciones
   useEffect(() => {
-    const speechText = `¡Gracias ${donorName} por tu donación de ${transaction.monto} soles! ¡Eres increíble!`
-    
-    setTimeout(() => {
-      speak(speechText)
-    }, 500)
+    // Reproducir sonido de aplausos
+    play('assets/sounds/aplausos.mp3')
 
-    // Auto-ocultar después del tiempo especificado
-    const timer = setTimeout(() => {
+    // Mostrar animación por 5 segundos, luego mostrar texto
+    const animationTimer = setTimeout(() => {
+      setStage('text')
+    }, 5000)
+
+    // Auto-ocultar después de 10 segundos en total
+    const hideTimer = setTimeout(() => {
       setIsVisible(false)
       setTimeout(onComplete, 500) // Tiempo para la animación de salida
-    }, design.duration)
+    }, 10000)
 
-    return () => clearTimeout(timer)
-  }, [transaction, speak, onComplete, design.duration, donorName])
-
-  // Componente de partículas/sparkles
-  const SparklesComponent = ({ count }: { count: number }) => (
-    <>
-      {Array.from({ length: count }).map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute"
-          initial={{ 
-            opacity: 0, 
-            scale: 0,
-            x: Math.random() * 400 - 200,
-            y: Math.random() * 300 - 150
-          }}
-          animate={{ 
-            opacity: [0, 1, 0], 
-            scale: [0, 1, 0],
-            rotate: 360,
-            x: Math.random() * 600 - 300,
-            y: Math.random() * 400 - 200
-          }}
-          transition={{ 
-            duration: 3, 
-            delay: Math.random() * 2,
-            repeat: Infinity,
-            repeatDelay: Math.random() * 3
-          }}
-        >
-          <Sparkles className="w-4 h-4 text-yellow-300" />
-        </motion.div>
-      ))}
-    </>
-  )
+    return () => {
+      clearTimeout(animationTimer)
+      clearTimeout(hideTimer)
+    }
+  }, [transaction, play, onComplete])
 
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: -100, scale: 0.8 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -50, scale: 0.9 }}
-          className="fixed top-8 right-8 z-50"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -50 }}
+          className="fixed top-0 left-0 right-0 z-50 flex justify-center"
         >
-          <div className="relative">
-            {/* Partículas de fondo */}
-            <SparklesComponent count={design.sparkles} />
-            
-            {/* Notificación principal */}
+          <div className="relative w-full max-w-4xl">
+            {/* Contenedor principal */}
             <motion.div
-              animate={{ 
-                scale: [1, 1.02, 1],
-                rotate: designType === 'pro' ? [0, 1, -1, 0] : 0
-              }}
-              transition={{ 
-                duration: 2, 
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className={`
-                bg-gradient-to-r ${design.bgGradient} 
-                rounded-2xl p-6 ${design.shadow} 
-                border-2 border-white/20 backdrop-blur-sm
-                max-w-sm transform ${design.scale}
-                ${designType === 'pro' ? 'animate-pulse' : ''}
-              `}
+              className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 
+                        rounded-b-2xl p-6 shadow-2xl border-2 border-white/20 backdrop-blur-sm"
             >
-              {/* Header con icono */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
+              {stage === 'animation' ? (
+                <div className="flex flex-col items-center justify-center">
+                  {/* Animación Lottie */}
+                  <div className="w-64 h-64">
+                    <DotLottiePlayer
+                      src={animationRef.current}
+                      autoplay
+                      loop
+                    />
+                  </div>
+                  
+                  {/* Monto destacado */}
                   <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                    className={`p-2 rounded-full bg-white/20 ${design.iconColor}`}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: [0, 1.2, 1] }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                    className="bg-white/20 rounded-xl px-5 py-3 mt-4"
                   >
-                    <IconComponent className="w-6 h-6" />
+                    <span className="text-white font-bold text-2xl">
+                      S/. {transaction.monto}
+                    </span>
                   </motion.div>
-                  <div>
-                    <h3 className="text-white font-bold text-lg">
-                      {designType === 'pro' ? '¡SÚPER DONACIÓN!' : 
-                       designType === 'standard' ? '¡Gran Donación!' : '¡Nueva Donación!'}
-                    </h3>
-                    <p className="text-white/80 text-sm">¡Gracias por tu apoyo!</p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center relative">
+                  {/* Animación de serpentinas */}
+                  <div className="absolute inset-0 z-0">
+                    <DotLottiePlayer
+                      src="assets/lotties/serpentinas.lottie"
+                      autoplay
+                      loop
+                    />
+                  </div>
+                  
+                  {/* Texto de agradecimiento */}
+                  <div className="z-10 text-center p-8">
+                    <h2 className="font-['Montserrat'] text-4xl font-extrabold text-white mb-4 text-shadow">
+                      ¡GRACIAS POR TU DONACIÓN!
+                    </h2>
+                    <p className="font-['Poppins'] text-2xl text-white/90 mb-6">
+                      {donorName}
+                    </p>
+                    <div className="bg-white/20 rounded-xl px-5 py-3 inline-block">
+                      <span className="text-white font-bold text-3xl">
+                        S/. {transaction.monto}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                
-                {/* Monto destacado */}
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: [0, 1.2, 1] }}
-                  transition={{ delay: 0.3, duration: 0.5 }}
-                  className="bg-white/20 rounded-xl px-3 py-2"
-                >
-                  <span className="text-white font-bold text-xl">
-                    S/. {transaction.monto}
-                  </span>
-                </motion.div>
-              </div>
-
-              {/* Información del donante */}
-              <div className="bg-white/10 rounded-xl p-4 mb-4">
-                <p className="text-white font-semibold text-center">
-                  {donorName}
-                </p>
-                <p className="text-white/70 text-sm text-center mt-1">
-                  ¡Eres increíble! 🎉
-                </p>
-              </div>
+              )}
 
               {/* Barra de progreso para el tiempo */}
               <motion.div
-                className="h-1 bg-white/20 rounded-full overflow-hidden"
+                className="h-2 bg-white/20 rounded-full overflow-hidden mt-4"
                 initial={{ width: "100%" }}
               >
                 <motion.div
                   className="h-full bg-white/60 rounded-full"
                   initial={{ width: "100%" }}
                   animate={{ width: "0%" }}
-                  transition={{ duration: design.duration / 1000, ease: "linear" }}
+                  transition={{ duration: stage === 'animation' ? 5 : 5, ease: "linear" }}
                 />
               </motion.div>
-
-              {/* Efectos especiales para Pro */}
-              {designType === 'pro' && (
-                <motion.div
-                  className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 rounded-2xl opacity-30 blur-sm"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                />
-              )}
             </motion.div>
-
-            {/* Efectos adicionales para Standard y Pro */}
-            {(designType === 'standard' || designType === 'pro') && (
-              <motion.div
-                className="absolute inset-0 pointer-events-none"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0, 1, 0] }}
-                transition={{ duration: 1, repeat: Infinity, repeatDelay: 1 }}
-              >
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2">
-                  <Zap className="w-8 h-8 text-yellow-300" />
-                </div>
-              </motion.div>
-            )}
           </div>
         </motion.div>
       )}
     </AnimatePresence>
   )
 }
+
+// Importar fuentes
+const fontStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Poppins:wght@400;600&display=swap');
+
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+`;
 
 // Componente principal del Overlay
 export default function StreamOverlay() {
@@ -351,6 +261,8 @@ export default function StreamOverlay() {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">
+      {/* Estilos de fuentes */}
+      <style dangerouslySetInnerHTML={{ __html: fontStyles }} />
       {/* Fondo transparente para OBS */}
       <div className="absolute inset-0 bg-transparent" />
       
