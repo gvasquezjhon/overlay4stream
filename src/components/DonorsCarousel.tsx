@@ -84,8 +84,8 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
   if (loading && transactions.length === 0) {
     return (
       <motion.div 
-        className="fixed bottom-4 left-4 z-40 max-w-xs"
-        initial={{ opacity: 0, y: 20 }}
+        className="fixed top-4 left-4 z-40 max-w-xs"
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
@@ -107,10 +107,10 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
 
   return (
     <motion.div 
-      className="fixed bottom-4 left-4 z-40 max-w-xs"
-      initial={{ opacity: 0, y: 20 }}
+      className="fixed top-4 left-4 z-40 max-w-xs"
+      initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
+      exit={{ opacity: 0, y: -20 }}
       transition={{ 
         duration: 0.5,
         type: "spring",
