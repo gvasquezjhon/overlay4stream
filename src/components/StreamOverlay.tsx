@@ -45,11 +45,11 @@ function getRandomAnimation() {
 // Función para obtener un saludo aleatorio
 function getRandomGreeting(name: string, amount: number) {
   const greetings = [
-    `¡Gracias, ${name}, por ese moradito de S/${amount}! \n¡Se siente el cariño en cada yape!`,
-    `¡Oe, qué buena onda ${name}! \nEse moradito de S/${amount} nos alegra el live. ¡Eres grande!`,
-    `¡Un moradito lleno de buena vibra llegó de parte de ${name} con S/${amount}! \n¡Gracias de corazón!`,
-    `¡Atención, atención! ¡${name} se acaba de lucir con un moradito de S/${amount}! \n¡Muchas gracias, crack!`,
-    `¡Gracias, ${name}, por el moradito de S/${amount}! \n¡Se aprecia un montón!`
+    `✨ ¡Gracias, ${name}! ✨\n\n💜 Por ese moradito de S/${amount} 💜\n\n¡Se siente el cariño en cada yape! 🙌`,
+    `🎉 ¡Oe, qué buena onda ${name}! 🎉\n\n💜 Ese moradito de S/${amount} nos alegra el live 💜\n\n¡Eres grande! 🔥`,
+    `💫 ¡Un moradito lleno de buena vibra! 💫\n\n💜 Llegó de parte de ${name} con S/${amount} 💜\n\n¡Gracias de corazón! ❤️`,
+    `🚨 ¡Atención, atención! 🚨\n\n💜 ¡${name} se acaba de lucir con un moradito de S/${amount}! 💜\n\n¡Muchas gracias, crack! 👑`,
+    `🌟 ¡Gracias, ${name}! 🌟\n\n💜 Por el moradito de S/${amount} 💜\n\n¡Se aprecia un montón! 🙏`
   ];
   
   const randomIndex = Math.floor(Math.random() * greetings.length);
@@ -146,7 +146,7 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
                   
                   {/* Texto de agradecimiento con mejor contraste */}
                   <div className="z-10 text-center max-w-4xl mx-auto px-4">
-                    <h2 className="font-['Montserrat'] text-5xl font-extrabold text-white mb-8 text-shadow drop-shadow-lg">
+                    <h2 className="font-['Montserrat'] text-5xl font-extrabold text-white mb-8 text-shadow drop-shadow-lg whitespace-pre-line leading-tight">
                       {greeting.current}
                     </h2>
                   </div>
