@@ -77,7 +77,7 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
       <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-purple-300">
         <div className="flex flex-col items-center">
           <h3 className="text-purple-800 font-bold text-lg mb-2 text-center">
-            Manda tu moradito
+            💜 Apoya el Stream
           </h3>
           
           {error ? (
@@ -96,17 +96,17 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
                   includeMargin={true}
                 />
               </div>
-              <p className="text-purple-700 font-semibold text-sm">
+              {/* <p className="text-purple-700 font-semibold text-sm">
                 {yapeAccount.nombre}
               </p>
               <p className="text-purple-700 font-semibold text-sm mb-2">
                 {yapeAccount.telefono}
-              </p>
+              </p> */}
             </>
           )}
           
           <p className="text-purple-900 text-xs text-center mt-1">
-            Recibe tu saludo en la transmisión
+            Cada granito cuenta 🙏
           </p>
         </div>
       </div>
