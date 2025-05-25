@@ -21,8 +21,8 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
   
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
   
-  // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
-  const today = new Date().toISOString().split('T')[0];
+  // Obtener la fecha actual en formato ISO completo (YYYY-MM-DDT00:00:00)
+  const today = new Date().toISOString().split('T')[0] + 'T00:00:00';
   
   // Función para obtener las transacciones
   useEffect(() => {
@@ -31,8 +31,9 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
     const fetchTransactions = async () => {
       try {
         setLoading(true);
+        console.log('Fetching transactions with date:', today);
         const response = await fetch(
-          `${apiUrl}/api/v1/transactions/?skip=0&limit=100&start_date=${today}`,
+          `${apiUrl}/api/v1/transactions/?skip=0&limit=100&start_date=${encodeURIComponent(today)}`,
           {
             method: 'GET',
             headers: {
