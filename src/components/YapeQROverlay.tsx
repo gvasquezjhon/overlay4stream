@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import QRCode from 'qrcode.react'
+import { QRCodeSVG } from 'qrcode.react'
 
 interface YapeQROverlayProps {
   token: string | null;
@@ -86,12 +86,11 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
           ) : (
             <>
               <div className="bg-white p-2 rounded-lg mb-2">
-                <QRCode 
+                <QRCodeSVG 
                   value={yapeAccount.qr} 
                   size={150}
                   level="H"
                   includeMargin={true}
-                  renderAs="svg"
                 />
               </div>
               <p className="text-purple-700 font-semibold text-sm">
