@@ -10,7 +10,7 @@ interface YapeAccount {
   id: number;
   telefono: string;
   nombre: string;
-  qr: string;
+  qr_code: string;
 }
 
 export default function YapeQROverlay({ token }: YapeQROverlayProps) {
@@ -43,11 +43,7 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
 
         const data = await response.json();
         
-        // Asegurarse de que el QR tenga un formato válido
-        if (!data.qr || data.qr === 'undefined' || data.qr === 'null') {
-          // Crear un QR válido con el formato de Yape
-          data.qr = `yape://transaction?type=p2p&phoneNumber=${data.telefono}&name=${encodeURIComponent(data.nombre)}`;
-        }
+        // No necesitamos modificar el QR, viene correcto del backend
         
         setYapeAccount(data);
       } catch (error) {
@@ -94,7 +90,7 @@ export default function YapeQROverlay({ token }: YapeQROverlayProps) {
             <>
               <div className="bg-white p-2 rounded-lg mb-2">
                 <QRCodeSVG 
-                  value={yapeAccount.qr || `yape://transaction?type=p2p&phoneNumber=${yapeAccount.telefono}&name=${encodeURIComponent(yapeAccount.nombre)}`} 
+                  value={yapeAccount.qr_code} 
                   size={150}
                   level="H"
                   includeMargin={true}
