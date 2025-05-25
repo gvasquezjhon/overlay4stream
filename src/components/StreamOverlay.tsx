@@ -41,6 +41,20 @@ function getRandomAnimation() {
   return animations[randomIndex]
 }
 
+// Función para obtener un saludo aleatorio
+function getRandomGreeting(name: string, amount: number) {
+  const greetings = [
+    `¡Gracias, ${name}, por ese moradito de S/${amount}! ¡Se siente el cariño en cada yape!`,
+    `¡Oe, qué buena onda ${name}! Ese moradito de S/${amount} nos alegra el live. ¡Eres grande!`,
+    `¡Un moradito lleno de buena vibra llegó de parte de ${name} con S/${amount}! ¡Gracias de corazón!`,
+    `¡Atención, atención! ¡${name} se acaba de lucir con un moradito de S/${amount}! ¡Muchas gracias, crack!`,
+    `¡Gracias, ${name}, por el moradito de S/${amount}! ¡Se aprecia un montón!`
+  ];
+  
+  const randomIndex = Math.floor(Math.random() * greetings.length);
+  return greetings[randomIndex];
+}
+
 // Componente para cada tipo de notificación
 function DonationNotification({ transaction, onComplete }: NotificationProps) {
   const [playAplausos] = useSound(aplausosSound, { volume: 0.8 })
@@ -55,6 +69,7 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
   }
 
   const donorName = extractDonorName(transaction.message)
+  const greeting = useRef(getRandomGreeting(donorName, transaction.monto))
 
   // Reproducir sonido y gestionar animaciones
   useEffect(() => {
@@ -134,18 +149,10 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
                   </div>
                   
                   {/* Texto de agradecimiento con mejor contraste */}
-                  <div className="z-10 text-center">
-                    <h2 className="font-['Montserrat'] text-5xl font-extrabold text-white mb-4 text-shadow drop-shadow-lg">
-                      ¡GRACIAS POR TU DONACIÓN!
+                  <div className="z-10 text-center max-w-4xl mx-auto px-4">
+                    <h2 className="font-['Montserrat'] text-5xl font-extrabold text-white mb-8 text-shadow drop-shadow-lg">
+                      {greeting.current}
                     </h2>
-                    <p className="font-['Poppins'] text-3xl text-white mb-6 drop-shadow-lg">
-                      {donorName}
-                    </p>
-                    <div className="backdrop-blur-md rounded-full px-6 py-3 inline-block">
-                      <span className="text-white font-bold text-4xl drop-shadow-lg">
-                        S/. {transaction.monto}
-                      </span>
-                    </div>
                   </div>
                 </div>
               )}
