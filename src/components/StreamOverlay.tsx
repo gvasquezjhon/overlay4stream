@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Lottie from 'lottie-react'
+import useSound from 'use-sound'
+import aplausosSound from '../assets/sounds/aplausos.mp3'
 
 interface Transaction {
   id: number
@@ -18,36 +20,6 @@ interface NotificationProps {
   onComplete: () => void
 }
 
-// Función para reproducir sonido
-function useSound() {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  
-  useEffect(() => {
-    // Crear el elemento de audio una vez
-    audioRef.current = new Audio();
-    audioRef.current.volume = 0.8;
-    
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = '';
-      }
-    };
-  }, []);
-  
-  const play = (soundPath: string) => {
-    if (audioRef.current) {
-      audioRef.current.src = soundPath;
-      
-      // Intentar reproducir y manejar el error silenciosamente
-      audioRef.current.play().catch(error => {
-        console.log('No se pudo reproducir el audio automáticamente:', error);
-      });
-    }
-  }
-
-  return { play }
-}
 
 // Importar animaciones
 import conejoLentes from '../assets/lotties/conejo-lentes.json'
@@ -71,10 +43,10 @@ function getRandomAnimation() {
 
 // Componente para cada tipo de notificación
 function DonationNotification({ transaction, onComplete }: NotificationProps) {
-  const { play } = useSound()
+  const [playAplausos] = useSound(aplausosSound, { volume: 0.8 })
   const [isVisible, setIsVisible] = useState(true)
   const [stage, setStage] = useState<'animation'|'text'>(('animation'))
-  const animationRef = useRef<string>(getRandomAnimation())
+  const animationRef = useRef<any>(getRandomAnimation())
   
   // Extraer nombre del donante del mensaje
   const extractDonorName = (message: string) => {
@@ -86,8 +58,8 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
 
   // Reproducir sonido y gestionar animaciones
   useEffect(() => {
-    // Intentar reproducir sonido de aplausos (puede fallar por restricciones del navegador)
-    play('/assets/sounds/aplausos.mp3')
+    // Reproducir sonido de aplausos usando la biblioteca use-sound
+    playAplausos()
 
     // Mostrar animación por 5 segundos, luego mostrar texto
     const animationTimer = setTimeout(() => {
@@ -104,7 +76,7 @@ function DonationNotification({ transaction, onComplete }: NotificationProps) {
       clearTimeout(animationTimer)
       clearTimeout(hideTimer)
     }
-  }, [transaction, play, onComplete])
+  }, [transaction, playAplausos, onComplete])
 
   return (
     <AnimatePresence>
@@ -276,10 +248,6 @@ export default function StreamOverlay() {
   // Función para manejar la interacción del usuario
   const handleUserInteraction = () => {
     setUserInteracted(true);
-    // Reproducir un audio silencioso para desbloquear la API de audio
-    const audio = new Audio();
-    audio.volume = 0.01;
-    audio.play().catch(() => {});
   };
   
   // Si no hay token, mostrar mensaje
