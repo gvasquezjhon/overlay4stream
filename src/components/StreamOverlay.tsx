@@ -4,6 +4,7 @@ import Lottie from 'lottie-react'
 import useSound from 'use-sound'
 import aplausosSound from '../assets/sounds/aplausos.mp3'
 import YapeQROverlay from './YapeQROverlay'
+import DonorsCarousel from './DonorsCarousel'
 
 interface Transaction {
   id: number
@@ -404,8 +405,11 @@ export default function StreamOverlay() {
       {/* Componente QR de Yape */}
       <YapeQROverlay token={token} />
       
+      {/* Componente Carousel de Donadores */}
+      <DonorsCarousel token={token} />
+      
       {/* Indicador de conexión */}
-      <div className="fixed bottom-4 left-4 z-40">
+      <div className="fixed bottom-20 left-4 z-40">
         <div className="bg-black/50 rounded-full px-3 py-1 flex items-center space-x-2">
           <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
           <span className="text-white text-xs">Conectado</span>
