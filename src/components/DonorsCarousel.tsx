@@ -21,8 +21,14 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
   
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
   
-  // Obtener la fecha actual en formato ISO completo (YYYY-MM-DDT00:00:00)
-  const today = new Date().toISOString().split('T')[0] + 'T00:00:00';
+  // Obtener la fecha de hace 2 días en formato ISO completo (YYYY-MM-DDT00:00:00)
+  const getTwoDaysAgo = () => {
+    const date = new Date();
+    date.setDate(date.getDate() - 2);
+    return date.toISOString().split('T')[0] + 'T00:00:00';
+  };
+  
+  const startDate = getTwoDaysAgo();
   
   // Función para obtener las transacciones
   useEffect(() => {
@@ -31,9 +37,9 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
     const fetchTransactions = async () => {
       try {
         setLoading(true);
-        console.log('Fetching transactions with date:', today);
+        console.log('Fetching transactions with date:', startDate);
         const response = await fetch(
-          `${apiUrl}/api/v1/transactions/?skip=0&limit=100&start_date=${encodeURIComponent(today)}`,
+          `${apiUrl}/api/v1/transactions/?skip=0&limit=100&start_date=${encodeURIComponent(startDate)}`,
           {
             method: 'GET',
             headers: {
@@ -65,7 +71,7 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
     const interval = setInterval(fetchTransactions, 2 * 60 * 1000);
     
     return () => clearInterval(interval);
-  }, [token, apiUrl, today]);
+  }, [token, apiUrl, startDate]);
   
   // Rotar entre donadores cada 5 segundos
   useEffect(() => {
