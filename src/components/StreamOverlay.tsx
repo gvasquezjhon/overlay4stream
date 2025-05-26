@@ -5,6 +5,7 @@ import useSound from 'use-sound'
 import aplausosSound from '../assets/sounds/aplausos.mp3'
 import YapeQROverlay from './YapeQROverlay'
 import DonorsCarousel from './DonorsCarousel'
+import BackgroundVideo from './BackgroundVideo'
 
 interface Transaction {
   id: number
@@ -248,14 +249,19 @@ export default function StreamOverlay() {
   const [notifications, setNotifications] = useState<Transaction[]>([])
   const [token, setToken] = useState<string | null>(null)
   const wsRef = useRef<WebSocket | null>(null)
+  const [useLocalVideo, setUseLocalVideo] = useState<boolean>(false)
 
-  // Extraer token de la URL
+  // Extraer token de la URL y verificar configuración de video local
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
     const urlToken = urlParams.get('token')
     if (urlToken) {
       setToken(urlToken)
     }
+    
+    // Verificar si se debe usar video local desde variables de entorno
+    const localVideo = import.meta.env.VITE_LOCAL_VIDEO === '1'
+    setUseLocalVideo(localVideo)
   }, [])
 
   // Conectar al WebSocket
@@ -434,8 +440,13 @@ export default function StreamOverlay() {
     <div className="relative w-screen h-screen overflow-hidden">
       {/* Estilos de fuentes */}
       <style dangerouslySetInnerHTML={{ __html: fontStyles }} />
-      {/* Fondo transparente para OBS */}
-      <div className="absolute inset-0 bg-transparent" />
+      
+      {/* Video de fondo local o fondo transparente para OBS */}
+      {useLocalVideo ? (
+        <BackgroundVideo videoSrc="/uploads/video.mp4" />
+      ) : (
+        <div className="absolute inset-0 bg-transparent" />
+      )}
       
       {/* Notificaciones */}
       <AnimatePresence>
