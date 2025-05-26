@@ -61,8 +61,8 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
 
     fetchTransactions();
     
-    // Actualizar cada 5 minutos
-    const interval = setInterval(fetchTransactions, 5 * 60 * 1000);
+    // Actualizar cada 2 minutos para mantener los datos frescos
+    const interval = setInterval(fetchTransactions, 2 * 60 * 1000);
     
     return () => clearInterval(interval);
   }, [token, apiUrl, today]);
@@ -101,8 +101,58 @@ export default function DonorsCarousel({ token }: DonorsCarouselProps) {
     );
   }
   
-  if (error || transactions.length === 0) {
-    return null;
+  // Mostrar siempre el componente, incluso si no hay transacciones
+  if (error) {
+    return (
+      <motion.div 
+        className="fixed top-4 left-4 z-40 max-w-xs"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.div 
+          className="bg-gradient-to-br from-black/70 to-purple-900/70 backdrop-blur-md rounded-xl p-4 shadow-xl border border-purple-500/30 w-80"
+          animate={{ boxShadow: ["0px 4px 12px rgba(124, 58, 237, 0.3)", "0px 6px 16px rgba(124, 58, 237, 0.4)", "0px 4px 12px rgba(124, 58, 237, 0.3)"] }}
+          transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+        >
+          <div className="flex flex-col items-center">
+            <h3 className="text-white font-bold text-sm mb-2 text-center">
+              Familia que Apoya
+            </h3>
+            <p className="text-red-300 text-xs text-center">
+              Error al cargar datos
+            </p>
+          </div>
+        </motion.div>
+      </motion.div>
+    );
+  }
+  
+  // Si no hay transacciones, mostrar un mensaje
+  if (transactions.length === 0 && !loading) {
+    return (
+      <motion.div 
+        className="fixed top-4 left-4 z-40 max-w-xs"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.div 
+          className="bg-gradient-to-br from-black/70 to-purple-900/70 backdrop-blur-md rounded-xl p-4 shadow-xl border border-purple-500/30 w-80"
+          animate={{ boxShadow: ["0px 4px 12px rgba(124, 58, 237, 0.3)", "0px 6px 16px rgba(124, 58, 237, 0.4)", "0px 4px 12px rgba(124, 58, 237, 0.3)"] }}
+          transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+        >
+          <div className="flex flex-col items-center">
+            <h3 className="text-white font-bold text-sm mb-2 text-center flex items-center gap-1">
+              <span className="text-sm">👑</span> Familia que Apoya
+            </h3>
+            <p className="text-white text-xs text-center text-shadow-sm">
+              Sé el primero en apoyar hoy ✨
+            </p>
+          </div>
+        </motion.div>
+      </motion.div>
+    );
   }
 
   return (
