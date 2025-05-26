@@ -24,7 +24,6 @@ export default function BackgroundVideo({ videoSrc }: BackgroundVideoProps) {
         src={videoSrc}
         autoPlay
         loop
-        muted
         playsInline
       />
     </div>
