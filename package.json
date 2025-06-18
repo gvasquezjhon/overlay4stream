@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.7",
+    "@types/hls.js": "^0.13.3",
     "framer-motion": "^12.12.2",
+    "hls.js": "^1.6.2",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.511.0",
     "qrcode.react": "^4.2.0",
